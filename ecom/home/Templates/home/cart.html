@@ -1,0 +1,265 @@
+{%extends 'home/base.html'%}
+{%block cart %}
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+   
+  </head>
+  <body>
+    <div class="parent-container d-flex">
+        <div class="container">
+          {% if count is 0 %}
+          not found 
+          {%else%}
+        {%for a in c %}
+
+    
+        
+     <div class="card mb-3 " style="max-width: 740px;margin-left: 30px;">
+        <div class="row no-gutters">
+          <hr>
+            
+          <div class="col-md-4 ">
+            
+            
+            
+              {%if a.cart_product is none %}
+                <img  class="image"src="{{a.main_product.image.url}}" alt="...">
+                {%else%}
+                <img  class="image"src="{{a.cart_product.image.url}}" alt="...">
+              {%endif%}
+          </div>
+          <div class="col-md-8">
+
+            <div class="card-body">
+                <div class="p" style="float:right">
+                    <span style="padding-bottom:50px;font-size:larger;">Price</span>
+                </div>
+                  <hr>
+                  {%if a.cart_product is none %}
+                  <p class="card-text" style="float:right;font-weight:bold">&nbsp;Rs.&nbsp;<span style="font-size:larger;"class="price">{{a.main_product.price}}</span></p>
+                  {%else%}
+                  <p class="card-text" style="float:right;font-weight:bold;">&nbsp;Rs.&nbsp;<span class="price">{{a.cart_product.price}}</span></p>
+                  {%endif%}  
+              <h5 class="card-title">{{a.title}}</h5>
+ 
+              {%if a.cart_product is none %}
+              <p class="card-text">color&nbsp;:&nbsp;<span>{{a.main_product.color}}</span></p>
+                {%else%}
+                <p class="card-text">color&nbsp;:&nbsp;<span>{{a.cart_product.color}}</span></p>
+              {%endif%}
+              {%if a.cart_product is none %}
+              <p class="card-text">Size:&nbsp;<span class="size">{{a.main_product.size}}</span></p>
+                {%else%}
+                <p class="card-text">Size:&nbsp;<span class="size">{{a.cart_product.size}}</span></p>
+              {%endif%}
+              <div class="quant">
+              <label for="">Quantity</label>
+              
+                <select class="custom-select"id="quantity" onchange="update()" >
+                  {%for i in numbers %}
+                  <option class="quanti" value="{{i}}"
+                  {% if a.quantity == i%}
+                  selected
+                  {% endif %}
+                  >
+                  {{i}}
+                </option>
+                  {%endfor%}
+                </select>
+              </div>
+                
+               <form action="">
+                {%csrf_token%}
+                <a href="" class="delete" data-sid="{{a.id}}"value={{a.id}} >delete</a>
+
+               </form>
+               
+             
+              
+             </div>
+             
+            </div>
+            
+          </div>
+         
+          
+        </div>
+        {%endfor%}
+        {%endif%}
+      </div>
+      <div class="container">
+         <div class="row">
+            <div class="col">
+              
+                <div class="card" style="width: 18rem;float:left;">
+                    <div class="card-body">
+                      <h5>Price details</h5>
+                      <hr>
+                      <h6 class="card-title">SubTotal ({{count}} items):
+                      </h6>
+                      <h5 class="card-title mb-2"id="totalcost"></h5>
+                      <p class="card-text"></p>
+                      <a href="/paymentpage/" class="card-link proceed">Proceed to Buy</a>
+                    </div>
+                  </div>
+                  <div class="card"id="testt" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5>Address</h5>
+                      <hr>
+                      <h6 class="card-title">address:
+                      </h6>
+                      <form action="">
+                      {% for a in address%}
+                      <input type="radio" class="dfd" data="{{a.sname}}">{{a.user}}<br>
+                      {%endfor%}
+                    </form>
+                    </div>
+                  </div>
+                 
+
+               
+            </div>
+            <div class="col">
+            </div>
+         </div>
+        </div>  
+        
+    </div>
+   
+      
+      <style>
+          .image{
+            height:30vh;
+            width:60%;
+              padding-left:50px;
+              padding-top: 20px;
+              padding-bottom: 20px;
+              object-fit: cover;
+          }
+          .card{
+              margin-bottom: 3px;
+              margin-left:10px;
+              margin-top:20px ;
+              border-radius:10px;
+          }
+          .card:hover{
+            box-shadow: 0 0 20px rgba(33,33,33,.2);
+            
+          }
+          .container{
+              margin-top: 10px;
+          }
+          body{
+              background-color:rgb(233, 232, 232)
+          }
+          .custom-select
+          {
+            width: 20%;
+          }
+          .delete
+          {
+            margin-top: 50px;
+          }
+          #testt{
+            visibility:hidden;
+          }
+      </style>
+
+   
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+   
+   
+<script>
+  $(document).ready(function(){
+
+    
+    update()
+    $(".dfd").on("click",function(f){
+      const i=$(this).attr("data");
+      console.log(i);
+
+
+
+
+      
+ 
+    })
+    $(".proceed").on("click",function(c){
+      $("#testt").css("visibility", "visible");
+
+
+    })
+
+     $(".delete").on('click',function(e){
+       e.preventDefault();
+       console.log("success");
+       const id=$(this).attr("data-sid");
+
+       console.log(id)
+       $.ajax({
+         type:'POST',
+         url:'{% url "cartdelete" %}',
+         data:{
+           id:id,
+           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+           action: 'post'
+         },
+         
+         success: function (data) {
+           console.log("success")
+           location.reload();
+            
+         },
+         error: function (data) {
+           alert("Got an error dude " + data);
+         }
+       });
+     });
+   });
+          
+           
+
+           function update(){
+            var price= document.getElementsByClassName('price')
+            var tcost=0
+            var price1,quantity,cost
+            for( var i=0;i<price.length;i++) 
+            {
+                price1=parseInt(document.getElementsByClassName('price')[i].innerHTML)
+                
+                quantity=document.getElementsByClassName('custom-select')[i].value
+ 
+                cost=quantity*price1
+                tcost=tcost+cost
+                
+            }
+            t=tcost.toString()
+            document.getElementById('totalcost').innerHTML="Rs."+t
+
+            
+           }
+          
+          
+
+     </script>
+
+  </body>
+
+{%endblock%}

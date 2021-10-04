@@ -1,0 +1,265 @@
+{% extends 'home/base.html'%}
+
+{%block prod %}
+<body>
+	
+<hr style="margin-top:30px;">
+<div class="container-nogutters">
+	<div class="row "style="margin-left:140px;">
+		<div class="main"style="float:left;display:inline-block;">
+			{% for k in i %}
+	           <div class="trail">
+				<img class="thumb" data={{k.image.url}} src="{{k.image.url}}"><br>
+			   </div>
+			
+
+			{%endfor%}
+		</div>
+		<div class="column">		
+			<img  src="{{w.image.url}}"  class="image"alt="">
+			<br><br>
+			
+			
+			
+		</div>
+		<div class="column">
+			<span style="font-size:24px;line-height: 32px;font-family: Arial,sans-serif;">{{w}}</span><br>
+			<h6 style="display: inline-block;padding-top: 10px;">Price:&nbsp;</h6><span style="color:#B12704">&#x20b9;{{w.price}}</span><br>
+			<span style="font-size: 14px!important;
+			line-height: 20px!important;"> inclusive of all taxes</span>
+			<hr>
+			
+			<h6 style="display: inline-block;padding-top:5px;">Size:&nbsp;</h6>	
+			{% if key1  is  0 %}
+			<form method="POST" id="sizecolor" action="product/{{w.slug}}/">
+				{% csrf_token %}
+			  <input type="hidden" value="{{l}}" id="product_id">
+			  <select id="csize">
+				  {% for siz in q %}
+				   <option id="size"  
+				    {% if w.size == siz.size %}
+				    selected
+					{% endif %}
+				   value="{{siz.size.id}}">{{siz.size}}
+				</option>
+				  {%endfor%}
+			  </select> 
+			</form>
+			{%else%}
+			{{w.size}}
+			{% endif %}	
+			<br>
+			{% if w.color is not none %}
+			<h6 style="display: inline-block;padding-top:5px;">Colour:&nbsp;</h6>{{w.color}}
+			{%else%}
+			<h6 style="display: inline-block;padding-top:5px;">Available Colours:&nbsp;</h6>
+
+
+			{% endif %}
+			<div class="gjioj" style="height:10px;">
+			
+                  
+			</div>
+			
+			<div id=appendHere>
+				<form action="/submit/name/" method="POST">
+					{% csrf_token %}
+					{% for a in c %}
+					<input type="radio" class="oimage" name="id" value="{{a.id}}" onchange="this.form.submit();">
+					<span style="padding-right:10px;">{{a.color}}</span>
+					{%endfor%}
+					<br>
+					{% for a in c %}
+					<img src="{{a.image.url}}" alt="" style="height: 70px;">
+					{%endfor%}
+				</form>
+			 </div>
+			
+			 {% if key is not 0 %}
+		
+			
+					<hr>
+					<form method="POST" action="{% url 'add' %}">
+						{% csrf_token %}
+						<input type="hidden" value="{{w.id}}" name="id">
+						
+						<input type="hidden" value="{{key}}" name="key">
+		
+						<button type="submit" class="btn btn-primary" style="width:150px;margin-bottom:10%">addtocart&nbsp;&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+							<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+						  </svg></button>
+					</form>
+					
+					
+				  
+				  
+				
+			  {% endif %}
+			  <div class="des">
+				  <h6><span>Instructions&nbsp;:</span></h6>
+				{{w.content|safe}}
+			  </div>
+			  
+		
+		
+		
+		</div>
+		
+	</div>
+</div>
+{% if ok == 1 %}
+<div class="container">
+	<h3>Recomonded Styles :</h3>
+	<div class="card" style="width: 18rem;">
+		<img class="card-img" src="{{re.rec1.image.url}}" alt="Card image cap">
+		<div class="card-body">
+		  <h5 class="card-title">{{re.rec1.title}}</h5>
+		  <p class="card-text"> <span style="color:#B12704">&#x20b9;&nbsp;{{re.rec1.price}}</span></p>
+		  <a href="/product/{{re.rec1.slug}}/" class="btn btn-primary">view</a>
+		  <a href="#" class="btn btn-success" style="margin-left:60px;">add caart</a>
+	  
+		</div>
+	  </div>
+	  <div class="card" style="width: 18rem;">
+		<img class="card-img" src="{{re.rec2.image.url}}" alt="Card image cap">
+		<div class="card-body">
+		  <h5 class="card-title">{{re.rec2.title}}</h5>
+		  <p class="card-text"> <span style="color:#B12704">&#x20b9;&nbsp;{{re.rec2.price}}</span></p>
+		  <a href="/product/{{re.rec2.slug}}/" class="btn btn-primary">view</a>
+		  <a href="#" class="btn btn-success" style="margin-left:60px;">add caart</a>
+	  
+		</div>
+	  </div>
+</div>
+{% endif%}
+<style>
+	.image {
+		height:80vh;
+		padding-left:50px;
+		
+		
+	}
+	.column {
+		margin-right:100px;
+	}
+	.container-nogutters{
+		margin-top: 50px;
+	}
+	#csize{
+		width:50px;
+		
+	}
+	#sizecolor{
+		display: inline-block;
+	}
+	.oimage {
+		display: inline-block;
+		
+	}
+	.btn {
+		margin-top: 40px;
+	}
+	.btn:hover{
+		box-shadow: 0 0 3px black;
+	}
+	.thumb {
+		height:75px;
+		width:60px;
+		margin-bottom: 10px;
+		border:1px solid  rgb(56, 55, 55);
+		
+
+	}
+	.des
+	{
+      padding-top: 20px;
+	  width: 400px;
+	  height:400px;
+	  overflow:auto;
+	 
+	}
+	.trail{
+     display: inline;
+
+	}
+	.main{
+		margin-top:15%;
+		
+	}
+	.card
+    {
+        display: inline-block;
+        margin-left: 60px;
+        margin-top: 3vh;
+        
+  
+    }
+
+    .card-img
+    {
+        height:35vh;
+        width: auto;
+        border-top-left-radius:20px ;  
+        border-top-right-radius:20px ; 
+        padding-left:50px;
+        zoom: 100%;
+    }
+    .card-body
+    {
+        border-radius: 20px;
+        
+
+    }
+    .card:hover{
+      box-shadow: 0 0 20px rgba(33,33,33,.2);
+
+    }
+	body{
+		overflow: none;
+	}
+  
+    
+
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+			<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+			<script>
+				$(document).ready(function(){
+					$("#csize").on('change',function(e){
+						e.preventDefault();
+						console.log("success");
+						const size_id=$("#csize").val()
+						console.log(size_id)
+						$.ajax({
+							type:'POST',
+							url:'{% url "ajaxcolor" %}',
+							data:{
+								productid:$("#product_id").val(),
+								size:size_id,
+								csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+								action: 'post'
+							},
+							data_type : 'html',
+							success: function (data) {
+								$('#appendHere').html(data);
+							},
+							error: function (data) {
+								alert("Got an error dude " + data);
+							}
+						});
+					});
+					$(".thumb").mouseover(function(e){
+						e.preventDefault();
+						$(".image").attr("src",$(this).attr("src"))
+
+
+					});
+				});	
+				const i=$(".thumb").attr("data")
+				console.log(i)	
+
+			</script>	
+</body>
+{% endblock %}

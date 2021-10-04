@@ -1,0 +1,13 @@
+<div id=appendHere>
+    <form action="/submit/name/" method="POST">
+        {% csrf_token %}
+        {% for a in c %}
+        <input type="radio" class="oimage" name="id" value="{{a.id}}" onchange="this.form.submit();">
+        <span style="padding-right:10px;">{{a.color}}</span>
+        {%endfor%}
+        <br>
+        {% for a in c %}
+        <img src="{{a.image.url}}" alt="" style="height: 70px;">
+        {%endfor%}
+    </form>
+ </div>	
